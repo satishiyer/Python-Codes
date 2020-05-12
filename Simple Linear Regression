@@ -13,6 +13,7 @@ plt.scatter(df.YearsExperience,df.Salary, color='red',marker='+')
 
 reg = linear_model.LinearRegression()
 reg.fit(df[['YearsExperience']],df.Salary)
+reg.score(df[['YearsExperience']],df.Salary)## 0.95%
 
 reg.coef_
 
