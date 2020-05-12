@@ -19,3 +19,10 @@ reg.coef_
 reg.intercept_
 
 reg.predict([[12],[13],[11.5],[0.5]])
+
+
+%matplotlib inline
+plt.xlabel('YearsExperience')
+plt.ylabel('Salary')
+plt.scatter(df.YearsExperience,df.Salary, color='red',marker='+')
+plt.plot(df.YearsExperience,reg.predict(df[['YearsExperience']]), color='blue')
