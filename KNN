@@ -1,0 +1,81 @@
+# Importing the libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
+
+# Upload data
+iris = pd.read_csv("C:\\Users\\Satish Iyer\\Downloads\\iris.csv")
+iris.head()
+
+
+
+iris.tail()
+
+# Data Visualization
+iris.shape
+iris['Species'].value_counts()
+iris.columns
+iris.values
+iris.info()
+iris.describe()
+
+X=iris.iloc[:,:4]
+
+X.head()
+
+Y=iris.iloc[:,-1]
+
+Y.head()
+
+# Data Normalization
+X= preprocessing.StandardScaler().fit_transform(X)
+X[0:4]
+
+# Train Test Split
+X_train, X_test, Y_train,Y_test = train_test_split(X,Y,test_size=0.3, random_state=1)
+Y_test.shape
+
+# Training & Predicting
+knnmodel=KNeighborsClassifier(n_neighbors=3)
+knnmodel.fit(X_train,Y_train)
+
+y_predict1=knnmodel.predict(X_test)
+
+# Accuracy
+from sklearn.metrics import accuracy_score
+acc=accuracy_score(Y_test,y_predict1)
+acc
+
+
+# Confusion matrix
+from sklearn.metrics import confusion_matrix
+cm=confusion_matrix(Y_test.values,y_predict1)
+cm
+
+cm1=pd.DataFrame(data=cm,index=['setosa','versicolor','virginica'],columns=['setosa','versicolor','virginica'])
+cm1
+
+Ks=21
+mean_acc=np.zeros((Ks-1))
+std_acc=np.zeros((Ks-1))
+
+#train and predict
+for n in range(1,Ks):
+    neigh=KNeighborsClassifier(n_neighbors=n).fit(X_train,Y_train)
+    yhat=neigh.predict(X_test)
+    mean_acc[n-1]=accuracy_score(Y_test,yhat)
+    print(mean_acc)
+
+print("The best accuracy was with", mean_acc.max(), "with k=",mean_acc.argmax())
+
+plt.plot(range(1,Ks),mean_acc,'r')
+plt.legend(('Accuracy '))
+plt.ylabel('Accuracy ')
+plt.xlabel('Number of Neighbors (K)')
+plt.tight_layout()
+plt.show()
+
+
